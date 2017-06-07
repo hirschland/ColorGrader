@@ -1,22 +1,25 @@
+%%% A vectorized version of colorgraderscript.m
+%
+%%% This vectorized script actually takes longer than looping through frame
+%   by frame on my machine, possibly because it requires more 4D matrices
+%   to be constructed and manipulated.
+%
+%%% copyright Joshua Harvey 2017
+
 clear all
 
-vidn = '~/Downloads/MujerRetablos.mov';
+vidn = '~/Downloads/MujerRetablos.mov'; % pathname of your video
 Video = VideoReader(vidn);
 mov = double(read(Video))/255;
 [a,b,c,t] = size(mov);
 
-% scaling factor for desaturation
-% point of hue = 0 distance
-% max distance from hue = 125
-% max scale should be .^4 for distance = 125
-% min scale should be .^1 for distance = 0
-% small scale should be .^1.2 for distance = 20
 tic
 
+% specify hues to 'intensify' (H1, H2,... HN)
 H1 = 55/255;
 H2 = 175/255;
-H = [H1 H2];
-for k = 90:-1:1 % Not vectorised, but faster
+H = [H1 H2]; % H = [H1 H2... HN]
+for k = t:-1:1 % Not vectorised, but faster
     
     imi = mov(:,:,:,k);
     % find pixels outside color band
@@ -47,14 +50,19 @@ for k = 90:-1:1 % Not vectorised, but faster
     R(:,:,3) = rv;
     r(:,:,:,k) = uint8(hsv2rgb(R)*255);
     
-    if rem(k,20) == 0
+    if rem(k,20) == 0 % see progress
         disp(k)
     end
 end
 toc
-% implay(r)
 
-vidObj = VideoWriter('~/Downloads/MujerRecolored5.avi','Uncompressed AVI');
+% view video
+implay(r)
+
+%% write new video to file
+
+newfilename = '~/Downloads/MujerRecolored.avi'; % specify new pathname for video
+vidObj = VideoWriter(newfilename,'Uncompressed AVI'); 
 open(vidObj);
 writeVideo(vidObj,r);
 close(vidObj)
