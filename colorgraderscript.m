@@ -1,10 +1,15 @@
-%%% A vectorized version of colorgraderscript.m
+%%% ColorGrader - transform any video into a cinematic Almodóvar film
 %
-%%% This vectorized script actually takes longer than looping through frame
-%   by frame on my machine, possibly because it requires more 4D matrices
-%   to be constructed and manipulated.
+%%% Takes in an RGB image/video, increases relative saturation for selected
+%   hues and desaturates remaining pixels. First generates test swatches to
+%   inspect how chosen parameters will transform images. Generate function 
+%   of hue-dependency by locating desired hues to stand out. Generate 
+%   function of sat-dependency, hues to be made weaker are more
+%   dramatically weakened.
 %
-%%% copyright Joshua Harvey 2017
+%%% Can also boost chosen hues if required.
+%
+%%% Copyright Joshua Harvey 2017
 
 clear all
 
