@@ -15,10 +15,7 @@ clear all
 
 %% Test swatches
 
-Test swatches to find scaling factors
-clear all
-
-res = 255;
+res = 255; % resolution of swatches
 
 testh = repmat(linspace(0,1,res), [res 1]);
 tests = repmat((linspace(1,0,res))', [1 res]);
